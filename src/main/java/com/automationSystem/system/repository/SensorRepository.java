@@ -19,4 +19,6 @@ public interface SensorRepository extends JpaRepository<Sensor, Object>
      // Find all ACTIVE sensors
      List<Sensor> findByStatus(String status);
 
+   //  int countByMicrocontrollerId(Long microcontrollerId);
+
 }

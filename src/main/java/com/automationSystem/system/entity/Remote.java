@@ -12,6 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Data
 public class Remote 
@@ -28,6 +30,7 @@ public class Remote
 
      @ManyToOne
      @JoinColumn(name="user_Id")
+     @JsonIgnore
      private User owner;
 
      @OneToMany(mappedBy = "remote", cascade=CascadeType.ALL)

@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.automationSystem.system.DataTransferObjects.DashboardStatsDto;
 import com.automationSystem.system.DataTransferObjects.DeviceRegisterRequest;
 import com.automationSystem.system.DataTransferObjects.LoginRequest;
 import com.automationSystem.system.DataTransferObjects.MicrocontrollerRegisterRequest;
@@ -56,6 +57,13 @@ public class AdminService
        @Autowired
        private VirtualDeviceCommandsRepository commandsRepository;
 
+       @Autowired
+       private com.automationSystem.system.config.JwtService jwtService;
+
+       
+       @Autowired
+       private DashboardAggregatorService aggregatorService;
+
        //method to register a new user
        @Transactional
        public ResponseEntity<?> registerUser(RegisterUserRequest request)
@@ -86,16 +94,23 @@ public class AdminService
              User user = userRepository.findByUsername(request.getUsername())
                    .orElseThrow(()-> new RuntimeException("no such user found"));
 
-             String originalPassword=user.getPassword();
-             String encodedPassword=encoder.encode(request.getPassword());
-
-             if(encodedPassword.equals(originalPassword))
+             if(encoder.matches(request.getPassword(), user.getPassword()))
              {
-                   return ResponseEntity.ok().body("ok");
+                   String token = jwtService.generateToken(user.getUsername());
+                   java.util.Map<String, String> response = new java.util.HashMap<>();
+                   response.put("token", token);
+                   response.put("username", user.getUsername());
+                   return ResponseEntity.ok().body(response);
              }
              return ResponseEntity.badRequest().body("Wrong password");
        }
    
+
+       public User getUserDetails(String username)
+       {
+             return userRepository.findByUsername(username)
+                   .orElseThrow(()-> new RuntimeException("User not found"));
+       }
 
        //method to register a new esp32 board
        @Transactional
@@ -144,8 +159,29 @@ public class AdminService
  
              //setting the microcontroller to which this device is connected and registered
              device.setController(microcontroller);
+             User user=microcontroller.getOwner();
+             //increment the counter in the user table for the devices
+             //serRepository.incrementDeviceCount();
+             userRepository.incrementDeviceCount(user.getUsername());
 
-             //saving the device in the database
+            
+
+             try 
+             {
+                   // Fetch the user's current live state from Redis
+                   DashboardStatsDto dashboard = aggregatorService.getStaticStats(user.getUsername());
+            
+                   // Increment the total monitored count
+                   dashboard.setTotalMonitored(dashboard.getTotalMonitored() + 1);
+            
+                   // Overwrite the old Redis cache with the new count
+                   aggregatorService.saveStateToRedis(user.getUsername(), dashboard);
+            
+             } 
+             catch (Exception e) 
+             {
+                   System.out.println("Warning: Could not update Redis cache during registration: " + e.getMessage());
+             }
              return deviceRepository.save(device);
        }
 

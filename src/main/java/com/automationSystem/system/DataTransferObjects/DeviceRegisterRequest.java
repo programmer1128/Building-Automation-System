@@ -10,7 +10,7 @@ public class DeviceRegisterRequest
       //device type - light,fan,heater etc
       private String type;     
       //which pin of the esp32 is this device connected to
-      private int pinNumber;     
+      private Integer pinNumber;     
       //which esp32 is this device connected to
       private String parentMacAddress;   
 }

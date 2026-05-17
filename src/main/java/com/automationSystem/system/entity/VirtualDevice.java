@@ -12,6 +12,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Data
 public class VirtualDevice 
@@ -28,6 +30,7 @@ public class VirtualDevice
 
       @ManyToOne
       @JoinColumn(name="remote_id")
+      @JsonIgnore
       private Remote remote;
 
       @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

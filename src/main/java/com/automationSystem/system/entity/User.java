@@ -24,6 +24,12 @@ public class User
      @Column(nullable=false)
      private String password;
 
+     @Column(name = "device_count")
+     private long deviceCount;
+
+     @Column(name = "anomaly_count")
+     private long anomalyCount;
+
      @OneToMany(mappedBy = "owner",cascade=CascadeType.ALL)
      private List<Microcontroller> microcontrollers;
      

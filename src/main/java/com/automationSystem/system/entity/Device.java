@@ -1,5 +1,7 @@
 package com.automationSystem.system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,16 +20,14 @@ public class Device
       @GeneratedValue(strategy = GenerationType.IDENTITY)
       private Long deviceId;
 
-      private String deviceName;   // "Room 1 Light"
-      private String deviceType;   // "LIGHT"
-      private String deviceStatus; // "OFF"
+      private String deviceName;   
+      private String deviceType;   
+      private String deviceStatus; 
     
-      private int pinNumber; // The GPIO pin on the ESP32 as the devices will all be 
-      //connected to esp32 via pins and for controlling the devices we need to know
-      //which pin it is connected to.
+      private int pinNumber; 
 
-      //
       @ManyToOne
       @JoinColumn(name = "microcontroller_id")
+      @JsonIgnore
       private Microcontroller controller; 
 }
