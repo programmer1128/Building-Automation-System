@@ -22,7 +22,7 @@ public class WebSocketConfig implements WebSocketConfigurer
      @Override
      public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) 
      {
-         // Exposes the exact endpoint we wrote in React
+         // Exposes the exact endpoint in React
          registry.addHandler(telemetryWebSocketHandler, "/ws/telemetry")
                 .setAllowedOrigins("http://localhost:3000", "http://192.168.0.162:3000");
      }
