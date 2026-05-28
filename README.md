@@ -128,23 +128,6 @@ public ResponseEntity<?> switchDevice(DeviceSwitchRequest request)
 
 ---
 
-## 🛠 Getting Started
-
-### Prerequisites
-- Java 21
-- Maven
-- MQTT Broker (e.g., Mosquitto)
-- `yt-dlp` (for YouTube streaming features)
-
-### Installation
-1. Clone the repository.
-2. Configure `application.properties` with your database and MQTT credentials.
-3. Run the application:
-   ```bash
-   mvn spring-boot:run
-   ```
-
----
 
 ## 🔮 Future Scope
 - **Mobile App:** Integration with a React Native or Flutter app.
