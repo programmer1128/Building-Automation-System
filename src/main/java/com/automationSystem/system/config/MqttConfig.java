@@ -19,7 +19,6 @@ import org.springframework.messaging.MessageHandler;
 @EnableIntegration
 public class MqttConfig {
 
-    // Keep your Connection Options
      @Bean
      public MqttConnectOptions mqttConnectOptions() 
      {
@@ -40,7 +39,6 @@ public class MqttConfig {
          return factory;
      }
 
-    // THIS IS THE CHANNEL WE WILL USE DIRECTLY
      @Bean
      public MessageChannel mqttOutboundChannel() 
      {
@@ -78,7 +76,7 @@ public class MqttConfig {
          adapter.setConverter(new DefaultPahoMessageConverter());
          adapter.setQos(1);
     
-         // LINK: This connects the MQTT flow to the channel your Subscriber is watching
+         // This connects the MQTT flow to the channel Subscriber is watching
          adapter.setOutputChannel(mqttInputChannel()); 
     
          return adapter;
