@@ -41,7 +41,7 @@ public class SecurityConfig
          http
          .csrf(csrf -> csrf.disable())
          
-         // 1. 🔥 FIX: Directly wire up the security-level CORS filter configuration source
+         // Directly wire up the security-level CORS filter configuration source
          .cors(cors -> cors.configurationSource(corsConfigurationSource())) 
          
          .authorizeHttpRequests(auth -> auth
@@ -54,9 +54,8 @@ public class SecurityConfig
     
          return http.build();
      }
-
-     // 2. 🔥 FIX: Replaced WebMvcConfigurer with CorsConfigurationSource 
-     // This intercepts and clears preflight OPTIONS requests before they hit your JWT filter!
+     
+     // This intercepts and clears preflight requests before they hit JWT filter
      @Bean
      public CorsConfigurationSource corsConfigurationSource() 
      {
